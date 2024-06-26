@@ -1,0 +1,3 @@
+python_dateutil==2.9.0.post0
+robocorp==2.0.2
+RPA==1.50.0
