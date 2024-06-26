@@ -28,6 +28,8 @@ def main():
     scraper.save_news_data_to_excel(news_data)
     scraper.browser.close_browser()
 
+    logging.info("Ending main function")
+
 
 class NewsScraper:
     """
@@ -136,15 +138,18 @@ class NewsScraper:
         Args:
             search_phrase (str): The phrase to search for.
         """
-        logging.info(f"Opening browser and searching for phrase: {search_phrase}")
-        self.browser.open_available_browser("https://www.latimes.com/")
-        self.browser.maximize_browser_window()
-        self.browser.wait_until_element_is_visible(
-            "xpath://button[@data-element='search-button']", timeout=40)
-        self.browser.click_element_when_visible("xpath://button[@data-element='search-button']")
-        self.browser.input_text_when_element_is_visible(
-            'xpath://input[@data-element="search-form-input"]', search_phrase)
-        self.browser.click_element_when_visible('xpath://button[@data-element="search-submit-button"]')
+        try:
+            logging.info(f"Opening browser and searching for phrase: {search_phrase}")
+            self.browser.open_available_browser("https://www.latimes.com/")
+            self.browser.maximize_browser_window()
+            self.browser.wait_until_element_is_visible(
+                "xpath://button[@data-element='search-button']", timeout=40)
+            self.browser.click_element_when_visible("xpath://button[@data-element='search-button']")
+            self.browser.input_text_when_element_is_visible(
+                'xpath://input[@data-element="search-form-input"]', search_phrase)
+            self.browser.click_element_when_visible('xpath://button[@data-element="search-submit-button"]')
+        except Exception as e:
+            logging.error(f"An error occurred in open_browser_and_search_news function: {e}")
 
     def should_process_article(self, date, months):
         """
