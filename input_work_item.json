@@ -1,0 +1,8 @@
+{
+    "payload": {
+        "search_phrase": "nasdaq",
+        "months": 3,
+        "news_category": "business"
+    },
+    "files": {}
+}
