@@ -4,31 +4,12 @@ import os
 import re
 import time
 import urllib.request
+import config
 from datetime import datetime
-
 from dateutil.relativedelta import relativedelta
-from robocorp.tasks import task
 from RPA.Browser.Selenium import Selenium
 from RPA.Excel.Files import Files
 from RPA.Robocorp.WorkItems import WorkItems
-
-
-def main():
-    scraper = NewsScraper()
-
-    logging.info("Starting main function")
-
-    try:
-        search_phrase, news_category, months = scraper.load_work_item()
-    except:
-        search_phrase, news_category, months = 'Nasdaq', "Business", 3
-
-    scraper.open_browser_and_search_news(search_phrase)
-    news_data = scraper.extract_news_data(search_phrase, news_category, months)
-    scraper.save_news_data_to_excel(news_data)
-    scraper.browser.close_browser()
-
-    logging.info("Ending main function")
 
 
 class NewsScraper:
@@ -44,8 +25,7 @@ class NewsScraper:
         self.browser = Selenium()
         self.excel = Files()
         self.work_items = WorkItems()
-        self.input_file_path = 'input_work_item.json'
-        self.output_file_path = 'output_work_item.json'
+        self.input_file_path = 'Resources/input_work_item.json'
         self.output_img_path = './output/'
 
     def load_work_item(self):
@@ -140,7 +120,7 @@ class NewsScraper:
         """
         try:
             logging.info(f"Opening browser and searching for phrase: {search_phrase}")
-            self.browser.open_available_browser("https://www.latimes.com/")
+            self.browser.open_available_browser(URL)
             self.browser.maximize_browser_window()
             self.browser.wait_until_element_is_visible(
                 "xpath://button[@data-element='search-button']", timeout=40)
@@ -346,7 +326,7 @@ class NewsScraper:
             news_data (list): The list of news data entries to save.
         """
         logging.info("Saving news data to Excel")
-        output_file = os.path.join("output", "news_data.xlsx")
+        output_file = os.path.join(OUTPUT_FILE_PATH, OUTPUT_FILE_NAME)
         self.excel.create_workbook(output_file)
         header = ["Title", "Date", "Description", "Image filename", "Search count", "Contains money flag"]
         self.excel.append_rows_to_worksheet([header], header=False)
@@ -371,7 +351,3 @@ class NewsScraper:
         with open(file_path, 'r') as file:
             data = json.load(file)
         return data["payload"]
-
-
-if __name__ == "__main__":
-    main()
