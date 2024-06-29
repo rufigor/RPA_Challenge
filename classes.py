@@ -120,7 +120,7 @@ class NewsScraper:
         """
         try:
             logging.info(f"Opening browser and searching for phrase: {search_phrase}")
-            self.browser.open_available_browser(URL)
+            self.browser.open_available_browser(config.URL)
             self.browser.maximize_browser_window()
             self.browser.wait_until_element_is_visible(
                 "xpath://button[@data-element='search-button']", timeout=40)
@@ -326,7 +326,7 @@ class NewsScraper:
             news_data (list): The list of news data entries to save.
         """
         logging.info("Saving news data to Excel")
-        output_file = os.path.join(OUTPUT_FILE_PATH, OUTPUT_FILE_NAME)
+        output_file = os.path.join(config.OUTPUT_FILE_PATH, config.OUTPUT_FILE_NAME)
         self.excel.create_workbook(output_file)
         header = ["Title", "Date", "Description", "Image filename", "Search count", "Contains money flag"]
         self.excel.append_rows_to_worksheet([header], header=False)

@@ -13,4 +13,6 @@ def read_json_file(json_file_path) -> dict:
     """
     with open(json_file_path) as json_file:
         data = json.load(json_file)
-    return data
+        dict_return = data.get('payload')
+    return dict_return
+
